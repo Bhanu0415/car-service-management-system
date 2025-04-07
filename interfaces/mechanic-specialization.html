@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarService Pro | Mechanic Specialization</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reuse the same CSS styles from signup.html */
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        /* Specialization Section */
+        .specialization-section {
+            padding: 10rem 5% 5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .specialization-container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow-lg);
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .specialization-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .specialization-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .specialization-header h2 {
+            font-size: 2.2rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .specialization-header p {
+            color: var(--gray);
+        }
+
+        .specialization-form {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .specialization-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .specialization-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .specialization-option input {
+            width: 1.2rem;
+            height: 1.2rem;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 576px) {
+            .navbar {
+                padding: 1rem 5%;
+            }
+            
+            .specialization-section {
+                padding: 8rem 5% 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-car"></i>
+            CarService Pro
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="login.html" class="btn">Login</a>
+        </div>
+    </nav>
+
+    <!-- Specialization Section -->
+    <section class="specialization-section">
+        <div class="specialization-container">
+            <div class="specialization-header">
+                <h2>Mechanic Specialization</h2>
+                <p>Please select your area(s) of expertise</p>
+            </div>
+            
+            <form id="specialization-form" class="specialization-form">
+                <div class="form-group">
+                    <label>Select your specializations:</label>
+                    <div class="specialization-options">
+                        <div class="specialization-option">
+                            <input type="radio" id="oil-change" name="specialization" value="Oil Change">
+                            <label for="oil-change">Oil Change</label>
+                        </div>
+                        <div class="specialization-option">
+                            <input type="radio" id="tire-rotation" name="specialization" value="Tire Rotation">
+                            <label for="tire-rotation">Tire Rotation</label>
+                        </div>
+                        <div class="specialization-option">
+                            <input type="radio" id="major-repair" name="specialization" value="Major Repair">
+                            <label for="major-repair">Major Repair</label>
+                        </div>
+                    </div>
+                    
+                </div>                
+                              
+                <div class="form-actions">
+                    <button type="submit" class="btn" style="padding: 1rem 2.5rem;">
+                        <i class="fas fa-check-circle"></i> Complete Registration
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById("specialization-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const selected = document.querySelector('input[name="specialization"]:checked');
+            const specialization = selected ? selected.value : null;
+
+            if (specialization) {
+                const response = await fetch("http://localhost:3000/signup/mechanic", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ specialization })
+                });
+
+                const data = await response.json();
+                alert(data.msg);
+
+                if (response.ok) {
+                    window.location.href = "index_mechanic.html";
+                }
+            } else {
+                alert("Please select your specialization.");
+            }
+        });
+        </script>
+</body>
+</html>

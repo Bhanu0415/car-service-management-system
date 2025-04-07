@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarService Pro | Mechanic Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            padding: 1rem 5%;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links .btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .nav-links .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        /* Dashboard Section */
+        .dashboard-section {
+            padding: 8rem 5% 4rem;
+            background-color: var(--light);
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .welcome-message {
+            font-size: 1.1rem;
+            color: var(--gray);
+        }
+
+        .welcome-message strong {
+            color: var(--primary);
+        }
+
+        .dashboard-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--gray-light);
+            padding-bottom: 1rem;
+        }
+
+        .tab-btn {
+            padding: 0.7rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--gray);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: var(--gray-light);
+        }
+
+        .booking-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .booking-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .booking-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .booking-card-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .booking-card-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+        }
+
+        .booking-id {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .booking-status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .status-in-progress {
+            background: rgba(0, 123, 255, 0.2);
+            color: #007bff;
+        }
+
+        .status-completed {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+        }
+
+        .status-cancelled {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+
+        .booking-card-body {
+            padding: 1.5rem;
+        }
+
+        .booking-detail {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+
+        .booking-detail-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(72, 149, 239, 0.1));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .booking-detail-content h4 {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            color: var(--dark);
+        }
+
+        .booking-detail-content p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .booking-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--gray-light);
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gray-light);
+            color: var(--dark);
+        }
+
+        .btn-outline:hover {
+            background: var(--gray-light);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107, #fd7e14);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 193, 7, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545, #f72585);
+            color: white;
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(220, 53, 69, 0.4);
+        }
+
+        /* Stats Cards */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(72, 149, 239, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .stat-card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            color: var(--gray-light);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .empty-state p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .booking-cards {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 5%;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .dashboard-section {
+                padding: 6rem 5% 2rem;
+            }
+            
+            .dashboard-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .stats-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-links a:not(.btn) {
+                display: none;
+            }
+            
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .booking-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .booking-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-car"></i>
+            CarService Pro
+        </div>
+        <div class="nav-links">
+            <a href="login.html" class="btn">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Dashboard Section -->
+    <section class="dashboard-section">
+        <div class="dashboard-header">
+            <div>
+                <h1>Mechanic Dashboard</h1>
+                <p class="welcome-message">Welcome back, <strong>Rajesh Kumar</strong> (ID: MECH-4251)</p>
+            </div>
+            <div>
+                <button class="btn btn-primary"><i class="fas fa-sync-alt"></i> Refresh</button>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-card-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-card-value">8</div>
+                <div class="stat-card-label">Pending Jobs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <div class="stat-card-value">5</div>
+                <div class="stat-card-label">In Progress</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-card-value">42</div>
+                <div class="stat-card-label">Completed</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="dashboard-tabs">
+            <button class="tab-btn active" data-tab="pending">Pending</button>
+            <button class="tab-btn" data-tab="in-progress">In Progress</button>
+            <button class="tab-btn" data-tab="completed">Completed</button>
+            
+        </div>
+
+        <!-- Booking Cards -->
+        <div class="booking-cards">
+            <!-- Pending Booking Card -->
+            <div class="booking-card" data-status="pending">
+                <div class="booking-card-header">
+                    <div class="booking-id">Booking #CS-78945</div>
+                    <span class="booking-status status-pending">Pending</span>
+                    <h3>Full Service Package</h3>
+                    <p><i class="fas fa-calendar-alt"></i> Today, 3PM - 6PM</p>
+                </div>
+                <div class="booking-card-body">
+                    <div class="booking-detail">
+                        <div class="booking-detail-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="booking-detail-content">
+                            <h4>Vehicle Details</h4>
+                            <p>Tata Nexon EV (2022) • DL 1C AB 1234</p>
+                        </div>
+                    </div>
+                    <div class="booking-detail">
+                        <div class="booking-detail-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="booking-detail-content">
+                            <h4>Customer</h4>
+                            <p>Amit Sharma • +91 98765 43210</p>
+                        </div>
+                    </div>
+                    <div class="booking-detail">
+                        <div class="booking-detail-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="booking-detail-content">
+                            <h4>Location</h4>
+                            <p>123 Green Avenue, Bangalore - 560001</p>
+                        </div>
+                    </div>
+                    <div class="booking-detail">
+                        <div class="booking-detail-icon">
+                            <i class="fas fa-sticky-note"></i>
+                        </div>
+                        <div class="booking-detail-content">
+                            <h4>Special Requests</h4>
+                            <p>Please check the brake pads thoroughly and replace if needed.</p>
+                        </div>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="btn btn-success"><i class="fas fa-check"></i> Accept</button>
+                        <button class="btn btn-danger"><i class="fas fa-times"></i> Reject</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- In Progress Booking Card -->
+            <div class="booking-card" data-status="in-progress">
+                <div class="booking-card-header">
+                    <div class="booking-id">Booking #CS-78942</div>
+                    <span class="booking-status status-in-progress">In Progress</span>
+                    <h3>AC Service</h3>
+                    <p><i class="fas fa-calendar-alt"></i> Tomorrow, 9AM - 12PM</p>
+                </div>
+                <div class="booking-card-body">
+                    <div class="booking-detail">
+                        <div class="booking-detail-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="booking-detail-content">
+                            <h4>Vehicle Details</h4>
+                            <p>Hyundai Kona Electric (2021) • DL 2D EF 5678</p>
+                        </div>
+                    </div>
+                    <div class="booking-detail">
+                        <div class="booking-detail-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="booking-detail-content">
+                            <h4>Customer</h4>
+                            <p>Priya Patel • +91 87654 32109</p>
+                        </div>
+                    </div>
+                    <div class="booking-detail">
+                        <div class="booking-detail-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="booking-detail-content">
+                            <h4>Location</h4>
+                            <p>456 Tech Park, Bangalore - 560102</p>
+                        </div>
+                    </div>
+                    <div class="booking-detail">
+                        <div class="booking-detail-icon">
+                            <i class="fas fa-sticky-note"></i>
+                        </div>
+                        <div class="booking-detail-content">
+                            <h4>Special Requests</h4>
+                            <p>AC is not cooling properly. Please check for leaks and refill gas if needed.</p>
+                        </div>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="btn btn-primary"><i class="fas fa-phone"></i> Call Customer</button>
+                        <button class="btn btn-success"><i class="fas fa-check-circle"></i> Mark Complete</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Completed Booking Card -->
+            <div class="booking-card" data-status="completed">
+                <div class="booking-card-header">
+                    <div class="booking-id">Booking #CS-78938</div>
+                    <span class="booking-status status-completed">Completed</span>
+                    <h3>Battery Replacement</h3>
+                    <p><i class="fas fa-calendar-alt"></i> 15 Jan 2024, 12PM - 3PM</p>
+                </div>
+                <div class="booking-card-body">
+                    <div class="booking-detail">
+                        <div class="booking-detail-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="booking-detail-content">
+                            <h4>Vehicle Details</h4>
+                            <p>MG ZS EV (2020) • DL 3G HI 9012</p>
+                        </div>
+                    </div>
+                    <div class="booking-detail">
+                        <div class="booking-detail-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="booking-detail-content">
+                            <h4>Customer</h4>
+                            <p>Rahul Verma • +91 76543 21098</p>
+                        </div>
+                    </div>
+                    <div class="booking-detail">
+                        <div class="booking-detail-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="booking-detail-content">
+                            <h4>Location</h4>
+                            <p>789 Lake View Apartments, Bangalore - 560034</p>
+                        </div>
+                    </div>
+                    <div class="booking-detail">
+                        <div class="booking-detail-icon">
+                            <i class="fas fa-sticky-note"></i>
+                        </div>
+                        <div class="booking-detail-content">
+                            <h4>Work Done</h4>
+                            <p>Replaced main battery pack with OEM part. Tested all electrical systems.</p>
+                        </div>
+                    </div>
+                    <div class="booking-detail">
+                        <div class="booking-detail-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="booking-detail-content">
+                            <h4>Customer Rating</h4>
+                            <p>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                <i class="fas fa-star" style="color: #ffc107;"></i>
+                                (5/5)
+                            </p>
+                        </div>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="btn btn-outline"><i class="fas fa-file-alt"></i> View Invoice</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State (for demonstration) -->
+            <div class="empty-state" id="empty-state" style="display: none;">
+                <div class="empty-state-icon">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h3>No Bookings Found</h3>
+                <p>You don't have any bookings in this category at the moment.</p>
+                <button class="btn btn-primary"><i class="fas fa-sync-alt"></i> Refresh</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Initialize the dashboard
+            await loadMechanicDashboard();
+
+            // Navbar scroll effect
+            const navbar = document.querySelector('.navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Tab functionality
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const bookingCards = document.querySelectorAll('.booking-card');
+            const emptyState = document.getElementById('empty-state');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update active tab
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    const tab = button.dataset.tab;
+                    filterBookingsByTab(tab);
+                });
+            });
+
+            // Refresh button functionality
+            document.querySelector('.btn-primary').addEventListener('click', async () => {
+                await loadMechanicDashboard();
+            });
+        });
+
+        async function loadMechanicDashboard() {
+            try {
+                // Get the mechanic ID from localStorage (set during login)
+                const mechanicId = localStorage.getItem('user_id');
+                
+                if (!mechanicId) {
+                    console.error('Mechanic ID not found in localStorage');
+                    // Redirect to login if no mechanic ID found
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Update welcome message with mechanic's name
+                await updateWelcomeMessage(mechanicId);
+                
+                // Fetch and display bookings
+                await fetchAndDisplayBookings(mechanicId);
+                
+            } catch (err) {
+                console.error("Error loading dashboard:", err);
+                alert("Failed to load dashboard data. Please try again.");
+            }
+        }
+
+        async function updateWelcomeMessage(mechanicId) {
+            const Fname = localStorage.getItem('Fname');
+            const Lname = localStorage.getItem('Lname');
+            try {
+                const response = await fetch(`http://localhost:3000/users/${mechanicId}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const mechanic = await response.json();
+                const welcomeMessage = document.querySelector('.welcome-message');
+                
+                if (welcomeMessage && mechanic) {
+                    welcomeMessage.innerHTML = `Welcome back, <strong>${Fname} ${Lname}</strong> (ID: MECH-${mechanicId})`;
+                }
+            } catch (err) {
+                console.error("Error updating welcome message:", err);
+            }
+        }
+
+        async function fetchAndDisplayBookings(mechanicId) {
+            try {
+                const response = await fetch(`http://localhost:3000/bookings/mechanic/${mechanicId}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const bookings = await response.json();
+                
+                // Process and display the bookings data
+                updateBookingCards(bookings);
+                updateStatsCards(bookings);
+                
+            } catch (err) {
+                console.error("Error fetching mechanic bookings:", err);
+                alert("Failed to load bookings. Please try again later.");
+            }
+        }
+
+        // Function to update booking cards based on API data
+        function updateBookingCards(bookings) {
+            const bookingCardsContainer = document.querySelector('.booking-cards');
+            
+            // Clear existing cards except the empty state
+            const emptyState = document.getElementById('empty-state');
+            bookingCardsContainer.innerHTML = '';
+            bookingCardsContainer.appendChild(emptyState);
+            
+            if (bookings.length === 0) {
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            
+            // Create and append new booking cards
+            bookings.forEach(booking => {
+                const bookingCard = createBookingCard(booking);
+                bookingCardsContainer.appendChild(bookingCard);
+            });
+            
+            // Re-activate tab filtering
+            const activeTab = document.querySelector('.tab-btn.active')?.dataset.tab || 'pending';
+            filterBookingsByTab(activeTab);
+        }
+
+        // Function to update stats cards
+        function updateStatsCards(bookings) {
+            const pendingCount = bookings.filter(b => b.status === 'Pending').length;
+            const inProgressCount = bookings.filter(b => b.status === 'In Progress').length;
+            const completedCount = bookings.filter(b => b.status === 'Completed').length;
+            
+            document.querySelectorAll('.stat-card').forEach(card => {
+                const label = card.querySelector('.stat-card-label').textContent;
+                const valueEl = card.querySelector('.stat-card-value');
+                
+                if (label === 'Pending Jobs') {
+                    valueEl.textContent = pendingCount;
+                } else if (label === 'In Progress') {
+                    valueEl.textContent = inProgressCount;
+                } else if (label === 'Completed') {
+                    valueEl.textContent = completedCount;
+                }
+            });
+        }
+
+        // Helper function to filter bookings based on active tab
+        function filterBookingsByTab(tabName) {
+            const bookingCards = document.querySelectorAll('.booking-card');
+            let hasVisibleCards = false;
+            
+            bookingCards.forEach(card => {
+                if (tabName === 'all' || card.dataset.status === tabName.replace(' ', '-')) {
+                    card.style.display = 'block';
+                    hasVisibleCards = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            document.getElementById('empty-state').style.display = hasVisibleCards ? 'none' : 'block';
+        }
+
+        // Helper function to create a booking card element from booking data
+        function createBookingCard(booking) {
+            const card = document.createElement('div');
+            card.className = 'booking-card';
+            card.dataset.status = booking.status.toLowerCase().replace(' ', '-');
+            
+            // Format date for display
+            const bookingDate = new Date(booking.service_date);
+            const formattedDate = bookingDate.toLocaleDateString('en-IN', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+            
+            // Set the inner HTML based on booking data
+            card.innerHTML = `
+                <div class="booking-card-header">
+                    <div class="booking-id">Booking #CS-${booking.booking_id}</div>
+                    <span class="booking-status status-${booking.status.toLowerCase().replace(' ', '-')}">
+                        ${booking.status}
+                    </span>
+                    <h3>${booking.service_name}</h3>
+                    <p><i class="fas fa-calendar-alt"></i> ${formattedDate}, ${booking.time_slot}</p>
+                </div>
+                <div class="booking-card-body">
+                    <div class="booking-detail">
+                        <div class="booking-detail-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="booking-detail-content">
+                            <h4>Vehicle Details</h4>
+                            <p>${booking.brand} ${booking.model} (${booking.reg_year}) • ${booking.reg_no}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="booking-detail">
+                        <div class="booking-detail-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="booking-detail-content">
+                            <h4>Customer</h4>
+                            <p>${booking.customer_name} • ${booking.phone_number}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="booking-detail">
+                        <div class="booking-detail-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="booking-detail-content">
+                            <h4>Location</h4>
+                            <p>${booking.street_name}, ${booking.city}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="booking-detail">
+                        <div class="booking-detail-icon">
+                            <i class="fas fa-sticky-note"></i>
+                        </div>
+                        <div class="booking-detail-content">
+                            <h4>${booking.status === 'Completed' ? 'Work Done' : 'Special Requests'}</h4>
+                            <p>${booking.special_request || 'No special requests'}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="booking-actions">
+                        ${getActionsForStatus(booking.status, booking.booking_id)}
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners to the buttons
+            addEventListenersToCard(card, booking);
+            
+            return card;
+        }
+
+        // Helper function to get action buttons based on booking status
+        function getActionsForStatus(status, bookingId) {
+            switch(status) {
+                case 'Pending':
+                    return `
+                        <button class="btn btn-success" data-booking-id="${bookingId}" data-action="accept">
+                            <i class="fas fa-check"></i> Accept
+                        </button>
+                        <button class="btn btn-danger" data-booking-id="${bookingId}" data-action="reject">
+                            <i class="fas fa-times"></i> Reject
+                        </button>
+                    `;
+                case 'In Progress':
+                    return `
+                        <button class="btn btn-primary" data-booking-id="${bookingId}" data-action="call">
+                            <i class="fas fa-phone"></i> Call Customer
+                        </button>
+                        <button class="btn btn-success" data-booking-id="${bookingId}" data-action="complete">
+                            <i class="fas fa-check-circle"></i> Mark Complete
+                        </button>
+                    `;
+                case 'Completed':
+                    return `
+                        <button class="btn btn-outline" data-booking-id="${bookingId}" data-action="invoice">
+                            <i class="fas fa-file-alt"></i> View Invoice
+                        </button>
+                    `;
+                default:
+                    return '';
+            }
+        }
+
+        // Add event listeners to card buttons
+        function addEventListenersToCard(card, booking) {
+            // Accept button
+            const acceptBtn = card.querySelector('[data-action="accept"]');
+            if (acceptBtn) {
+                acceptBtn.addEventListener('click', () => {
+                    updateBookingStatus(booking.booking_id, 'In Progress');
+                });
+            }
+            
+            // Reject button
+            const rejectBtn = card.querySelector('[data-action="reject"]');
+            if (rejectBtn) {
+                rejectBtn.addEventListener('click', () => {
+                    if (confirm('Are you sure you want to reject this booking?')) {
+                        updateBookingStatus(booking.booking_id, 'Cancelled');
+                    }
+                });
+            }
+            
+            // Mark Complete button
+            const completeBtn = card.querySelector('[data-action="complete"]');
+            if (completeBtn) {
+                completeBtn.addEventListener('click', () => {
+                    updateBookingStatus(booking.booking_id, 'Completed');
+                });
+            }
+            
+            // Call button
+            const callBtn = card.querySelector('[data-action="call"]');
+            if (callBtn) {
+                callBtn.addEventListener('click', () => {
+                    window.location.href = `tel:${booking.phone_number}`;
+                });
+            }
+        }
+
+        // Function to update booking status
+        async function updateBookingStatus(bookingId, newStatus) {
+            try {
+                const response = await fetch(`http://localhost:3000/bookings/${bookingId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                // Refresh bookings after update
+                const mechanicId = localStorage.getItem('user_id');
+                await fetchAndDisplayBookings(mechanicId);
+                alert(`Booking ${newStatus.toLowerCase()} successfully!`);
+                
+            } catch (err) {
+                console.error(`Error updating booking status:`, err);
+                alert(`Failed to update booking status. Please try again.`);
+            }
+        }
+    </script>
+</body>
+</html>

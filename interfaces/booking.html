@@ -1,0 +1,2077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <title>CarService Pro | Book Service</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+    
+    :root {
+        --primary: #4361ee;
+        --primary-dark: #3a56d4;
+        --secondary: #3f37c9;
+        --accent: #4895ef;
+        --dark: #1a1a2e;
+        --light: #f8f9fa;
+        --success: #4cc9f0;
+        --warning: #f72585;
+        --gray: #6c757d;
+        --gray-light: #e9ecef;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    /* Booking Cards */
+.booking-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.booking-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.booking-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.booking-card-header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 1.5rem;
+    position: relative;
+}
+
+.booking-card-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+}
+
+.booking-id {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 0.5rem;
+}
+
+.booking-status {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.status-pending {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+}
+
+.status-in-progress {
+    background: rgba(0, 123, 255, 0.2);
+    color: #007bff;
+}
+
+.status-completed {
+    background: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+}
+
+.booking-card-body {
+    padding: 1.5rem;
+}
+
+.booking-detail {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.booking-detail-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(72, 149, 239, 0.1));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.booking-detail-content h4 {
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+    color: var(--dark);
+}
+
+.booking-detail-content p {
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+/* Booking Tabs */
+.booking-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+}
+
+.booking-tab-btn {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+.booking-tab-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+}
+
+.booking-tab-btn:hover:not(.active) {
+    background: var(--gray-light);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    grid-column: 1/-1;
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    color: var(--gray-light);
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+}
+
+.empty-state p {
+    color: var(--gray);
+    margin-bottom: 1.5rem;
+}
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        background-color: var(--light);
+        color: var(--dark);
+        line-height: 1.6;
+        scroll-behavior: smooth;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    /* Navigation */
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 5%;
+        background-color: white;
+        box-shadow: var(--shadow);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        transition: var(--transition);
+    }
+
+    .navbar.scrolled {
+        padding: 1rem 5%;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .logo i {
+        font-size: 1.5rem;
+    }
+
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: var(--dark);
+        font-weight: 500;
+        position: relative;
+        transition: var(--transition);
+    }
+
+    .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        transition: var(--transition);
+    }
+
+    .nav-links a:hover::after {
+        width: 100%;
+    }
+
+    .nav-links .btn {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        padding: 0.7rem 1.5rem;
+        border-radius: 50px;
+        transition: var(--transition);
+        box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    .nav-links .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        text-align: center;
+        padding: 10rem 2rem 8rem;
+        margin-top: 80px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+    }
+
+    .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+        animation: fadeIn 1s ease;
+    }
+
+    .hero-section h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .hero-section p {
+        font-size: 1.2rem;
+        margin-bottom: 2.5rem;
+        opacity: 0.9;
+    }
+
+    .hero-btns {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .hero-btn {
+        display: inline-block;
+        background: white;
+        color: var(--primary);
+        padding: 1rem 2rem;
+        text-decoration: none;
+        border-radius: 50px;
+        transition: var(--transition);
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .hero-btn.outline {
+        background: transparent;
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .hero-btn.outline:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: white;
+    }
+
+    /* Stats Section */
+    .stats-section {
+        display: flex;
+        justify-content: space-around;
+        padding: 4rem 5%;
+        background: white;
+        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.03);
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        font-size: 1.1rem;
+        color: var(--gray);
+    }
+
+    /* Services Section */
+    .services-section {
+        padding: 6rem 5%;
+        background-color: var(--light);
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+
+    .section-header h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 1rem;
+    }
+
+    .section-header p {
+        max-width: 700px;
+        margin: 0 auto;
+        color: var(--gray);
+        font-size: 1.1rem;
+    }
+
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .service-card {
+        background-color: white;
+        padding: 2.5rem;
+        border-radius: 15px;
+        transition: var(--transition);
+        box-shadow: var(--shadow);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .service-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        transition: var(--transition);
+    }
+
+    .service-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .service-card:hover::before {
+        height: 10px;
+    }
+
+    .service-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(72, 149, 239, 0.1));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+        color: var(--primary);
+    }
+
+    .service-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--dark);
+    }
+
+    .service-card p {
+        color: var(--gray);
+        margin-bottom: 1.5rem;
+    }
+
+    .service-link {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: var(--transition);
+    }
+
+    .service-link:hover {
+        color: var(--secondary);
+        gap: 0.7rem;
+    }
+
+    /* Booking Section */
+    .booking-section {
+        padding: 6rem 5%;
+        background: white;
+    }
+
+    .booking-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: center;
+    }
+
+    .booking-content {
+        animation: fadeIn 1s ease;
+    }
+
+    .booking-content h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--dark);
+    }
+
+    .booking-content p {
+        color: var(--gray);
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+    }
+
+    .booking-features {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .feature-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(72, 149, 239, 0.1));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary);
+    }
+
+    /* Booking Form Styles */
+    .booking-form-container {
+        background: white;
+        border-radius: 15px;
+        box-shadow: var(--shadow-lg);
+        padding: 2.5rem;
+        position: relative;
+        overflow: hidden;
+        animation: fadeIn 1s ease 0.2s both;
+    }
+
+    .booking-form-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 10px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+    }
+
+    .booking-form {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .form-step {
+        display: none;
+    }
+
+    .form-step.active {
+        display: grid;
+        gap: 1.5rem;
+        animation: fadeIn 0.5s ease;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .form-group label {
+        font-weight: 500;
+        color: var(--dark);
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 1rem;
+        border: 1px solid var(--gray-light);
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: var(--transition);
+    }
+
+    input:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+
+    .form-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1rem;
+    }
+
+    .btn {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+    }
+
+    .btn-outline {
+        background: transparent;
+        border: 1px solid var(--gray-light);
+        color: var(--dark);
+    }
+
+    .btn-outline:hover {
+        background: var(--gray-light);
+    }
+
+    .error {
+        border-color: var(--warning);
+    }
+
+    .error-message {
+        color: var(--warning);
+        font-size: 0.9rem;
+        margin-top: 0.3rem;
+    }
+
+    /* Progress Steps */
+    .progress-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .progress-steps::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: var(--gray-light);
+        z-index: 0;
+    }
+
+    .progress-bar {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        z-index: 1;
+        transition: width 0.5s ease;
+    }
+
+    .step {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: white;
+        border: 2px solid var(--gray-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: var(--gray);
+        position: relative;
+        z-index: 2;
+        transition: var(--transition);
+    }
+
+    .step.active {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: white;
+    }
+
+    .step.completed {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: white;
+    }
+
+    /* Reviews Section */
+    .reviews-section {
+        padding: 6rem 5%;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    }
+
+    .reviews-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .review-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+    }
+
+    .review-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .reviewer {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .reviewer-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--gray-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary);
+        font-weight: 600;
+    }
+
+    .reviewer-info h4 {
+        font-size: 1.1rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .reviewer-info p {
+        color: var(--gray);
+        font-size: 0.9rem;
+    }
+
+    .rating {
+        display: flex;
+        gap: 0.2rem;
+        color: #ffc107;
+    }
+
+    .review-content p {
+        color: var(--gray);
+        font-style: italic;
+        position: relative;
+        padding-left: 1.5rem;
+    }
+
+    .review-content p::before {
+        content: '"';
+        position: absolute;
+        left: 0;
+        top: -0.5rem;
+        font-size: 2rem;
+        color: var(--gray-light);
+    }
+
+    /* FAQ Section */
+    .faq-section {
+        padding: 6rem 5%;
+        background: white;
+    }
+
+    .faq-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .faq-item {
+        margin-bottom: 1.5rem;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+    }
+
+    .faq-item:hover {
+        box-shadow: var(--shadow-lg);
+    }
+
+    .faq-question {
+        background: var(--light);
+        padding: 1.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: var(--transition);
+    }
+
+    .faq-question:hover {
+        background: var(--gray-light);
+    }
+
+    .faq-question i {
+        transition: var(--transition);
+    }
+
+    .faq-answer {
+        padding: 0 1.5rem;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .faq-item.active .faq-question {
+        background: var(--primary);
+        color: white;
+    }
+
+    .faq-item.active .faq-question i {
+        transform: rotate(180deg);
+    }
+
+    .faq-item.active .faq-answer {
+        padding: 1.5rem;
+        max-height: 500px;
+    }
+
+    /* CTA Section */
+    .cta-section {
+        padding: 6rem 5%;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+    }
+
+    .cta-content {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    .cta-section h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .cta-section p {
+        margin-bottom: 2.5rem;
+        opacity: 0.9;
+        font-size: 1.1rem;
+    }
+
+    .cta-btn {
+        background: white;
+        color: var(--primary);
+        padding: 1rem 2.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: var(--transition);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .cta-btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Footer */
+    .footer {
+        background: var(--dark);
+        color: white;
+        padding: 5rem 5% 2rem;
+    }
+
+    .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 3rem;
+        margin-bottom: 3rem;
+    }
+
+    .footer-logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .footer-logo i {
+        font-size: 1.5rem;
+    }
+
+    .footer-about p {
+        opacity: 0.7;
+        margin-bottom: 1.5rem;
+    }
+
+    .social-links {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .social-link {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+    }
+
+    .social-link:hover {
+        background: var(--primary);
+        transform: translateY(-3px);
+    }
+
+    .footer-links h3 {
+        font-size: 1.3rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    .footer-links h3::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 2px;
+        background: var(--primary);
+    }
+
+    .footer-links ul {
+        list-style: none;
+    }
+
+    .footer-links li {
+        margin-bottom: 0.8rem;
+    }
+
+    .footer-links a {
+        color: white;
+        opacity: 0.7;
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+    .footer-links a:hover {
+        opacity: 1;
+        padding-left: 5px;
+    }
+
+    .footer-contact p {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+        opacity: 0.7;
+    }
+
+    .footer-bottom {
+        text-align: center;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        opacity: 0.7;
+        font-size: 0.9rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+        .booking-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .booking-content {
+            text-align: center;
+        }
+        
+        .booking-features {
+            align-items: center;
+        }
+        
+        .hero-section h1 {
+            font-size: 2.8rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .navbar {
+            padding: 1rem 5%;
+        }
+        
+        .nav-links {
+            gap: 1rem;
+        }
+        
+        .hero-section {
+            padding: 8rem 2rem 6rem;
+        }
+        
+        .hero-section h1 {
+            font-size: 2.2rem;
+        }
+        
+        .hero-btns {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .stats-section {
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .nav-links a:not(.btn) {
+            display: none;
+        }
+        
+        .hero-section h1 {
+            font-size: 2rem;
+        }
+        
+        .booking-form-container {
+            padding: 1.5rem;
+        }
+    }
+    .booking-page {
+        padding: 8rem 5% 4rem;
+        background-color: var(--light);
+        min-height: 100vh;
+    }
+    
+    .booking-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    
+    .booking-header h1 {
+        font-size: 2.5rem;
+        color: var(--dark);
+        margin-bottom: 1rem;
+    }
+    
+    .booking-header p {
+        color: var(--gray);
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .status-cancelled {
+        background: rgba(108, 117, 125, 0.2);
+        color: var(--gray);
+    }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-car"></i>
+            CarService Pro
+        </div>
+        <div class="nav-links">
+            <button class="btn btn-logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </nav>
+    
+    <script>
+    function logout() {
+        // Clear user data from localStorage
+        localStorage.removeItem('user_id');
+        localStorage.removeItem('Fname');
+        localStorage.removeItem('Lname');
+        
+        // Redirect to login page
+        window.location.href = 'index.html';
+    }
+    </script>
+
+    <!-- Booking Page Content -->
+    <section class="booking-page">
+        <div class="booking-header">
+            <h1>Book Your Car Service</h1>
+            <p>Schedule your car service in just a few clicks. Our certified mechanics will come to your preferred location with all necessary tools and equipment.</p>
+        </div>
+
+        <!-- Add this before the booking form container -->
+<div class="vehicle-management" style="max-width: 800px; margin: 0 auto 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2>Your Vehicles</h2>
+        <button id="add-vehicle-btn" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Vehicle
+        </button>
+    </div>
+    
+    <div id="vehicles-list" class="vehicles-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem;"></div>
+    
+    <!-- Add Vehicle Modal (hidden by default) -->
+    <div id="vehicle-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div class="booking-form-container" style="max-width: 500px; margin: 2rem; position: relative;">
+            <button id="close-modal" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            <h2 style="margin-bottom: 1.5rem;">Add New Vehicle</h2>
+            <form id="vehicle-form">
+                <div class="form-group">
+                    <label for="vehicle-reg-number">Vehicle Registration Number</label>
+                    <input type="text" id="vehicle-reg-number" placeholder="DL 1C AB 1234" required>
+                </div>
+                <div class="form-group">
+                    <label for="vehicle-brand">Car Brand</label>
+                    <select id="vehicle-brand" required>
+                        <option value="">Choose Brand</option>
+                        <option value="tesla">Tesla</option>
+                        <option value="tata">Tata</option>
+                        <option value="mahindra">Mahindra</option>
+                        <option value="mg">MG</option>
+                        <option value="hyundai">Hyundai</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="vehicle-model">Car Model</label>
+                    <select id="vehicle-model" required>
+                        <option value="">Choose Model</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="vehicle-year">Registration Year</label>
+                    <select id="vehicle-year" required>
+                        <option value="">Select Year</option>
+                        <option value="2025">2025</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="vehicle-variant">Fuel Type</label>
+                    <select id="vehicle-variant" required>
+                        <option value="">Select Type</option>
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Electric">Electric</option>
+                    </select>
+                </div>
+                <div class="form-navigation">
+                    <button type="submit" class="btn btn-primary">Save Vehicle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+        
+        <!-- Booking Form Container -->
+<div class="booking-form-container" style="max-width: 800px; margin: 0 auto;">
+    <form id="booking-form" class="booking-form">
+        <div class="progress-steps">
+            <div class="progress-bar" style="width: 33%;"></div>
+            <div class="step active" data-step="1">1</div>
+            <div class="step" data-step="2">2</div>
+            <div class="step" data-step="3">3</div>
+        </div>
+        
+        <!-- Step 1: Select Vehicle -->
+        <div class="form-step active" data-step="1">
+            <div class="form-group">
+                <label for="selected-vehicle">Select Your Vehicle</label>
+                <select id="selected-vehicle" required>
+                    <option value="">Choose a vehicle</option>
+                    <!-- Vehicles will be populated here -->
+                </select>
+            </div>
+            <div class="form-navigation">
+                <button type="button" class="btn btn-primary next-step">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+        
+        <!-- Step 2: Service Details -->
+        <div class="form-step" data-step="2">
+            <div class="form-group">
+                <label for="service-type">Select Service Type</label>
+                <select id="service-type" required>
+                    <option value="">Choose Service</option>
+                    <option value="Oil Change">Oil Change</option>
+                    <option value="Tire Rotation">Tire Rotation</option>
+                    <option value="Major Repair">Major Repair</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="service-package">Service Package</label>
+                <select id="service-package" name="service-package" required>
+                    <option value="" disabled selected>Choose a package</option>
+                    <option value="basic">Basic</option>
+                    <option value="premium">Premium</option>
+                </select>
+            </div>
+            <div class="form-navigation">
+                <button type="button" class="btn btn-outline prev-step"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button type="button" class="btn btn-primary next-step">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+        
+        <!-- Step 3: Scheduling -->
+        <div class="form-step" data-step="3">
+            <div class="form-group">
+                <label for="service-date">Select Service Date</label>
+                <input type="date" id="service-date" required>
+            </div>
+            <div class="form-group">
+                <label for="service-time">Select Time Slot</label>
+                <select id="service-time" required>
+                    <option value="">Choose Time</option>
+                    <option value="morning">Morning (9AM - 12PM)</option>
+                    <option value="afternoon">Afternoon (12PM - 3PM)</option>
+                    <option value="evening">Evening (3PM - 6PM)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="service-pickup">Pickup Service</label>
+                <select id="service-pickup" name="service-pickup" required>
+                    <option value="" disabled selected>Do you require pickup facility?</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="special-requests">Special Requests (Optional)</label>
+                <textarea id="special-requests" rows="3" placeholder="Any additional instructions for our mechanic"></textarea>
+            </div>
+            <div class="form-navigation">
+                <button type="button" class="btn btn-outline prev-step"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button type="submit" class="btn btn-primary" id="confirm-booking">
+                    Confirm Booking <i class="fas fa-check"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+
+   <!-- Recent Bookings Section -->
+<div class="recent-bookings" style="max-width: 800px; margin: 3rem auto;">
+    <h2 style="margin-bottom: 1.5rem; text-align: center;">Your Recent Bookings</h2>
+    
+    <div class="booking-tabs">
+        <button class="booking-tab-btn active" data-tab="all">All</button>
+        <button class="booking-tab-btn" data-tab="pending">Pending</button>
+        <button class="booking-tab-btn" data-tab="in-progress">In Progress</button>
+        <button class="booking-tab-btn" data-tab="completed">Completed</button>
+    </div>
+    
+    <div id="bookings-list" class="booking-cards"></div>
+    
+    <div id="empty-bookings" class="empty-state" style="display: none;">
+        <div class="empty-state-icon">
+            <i class="fas fa-clipboard-list"></i>
+        </div>
+        <h3>No Bookings Found</h3>
+        <p>You haven't made any bookings yet.</p>
+    </div>
+</div>
+
+<!-- Success Message (hidden by default) -->
+<div id="success-message" style="display: none; position: fixed; top: 20px; right: 20px; background: #4BB543; color: white; padding: 1rem 2rem; border-radius: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;">
+    Booking confirmed successfully!
+</div>
+</section>
+</div>
+
+
+<script>
+    // Global variables to store user and API configuration
+    const API_BASE_URL = 'http://localhost:3000';
+    let currentUser = {
+        id: null,
+        role: null,
+        name: null
+    };
+    
+    // Car models mapping
+    const carModelMap = {
+        'tesla': ['Model 3', 'Model Y', 'Model S', 'Model X'],
+        'tata': ['Nexon EV', 'Tigor EV', 'Punch EV'],
+        'mahindra': ['XUV400', 'eVerito'],
+        'mg': ['ZS EV', 'Comet EV'],
+        'hyundai': ['Kona Electric', 'Ioniq Electric'],
+        'other': ['Other Electric Model']
+    };
+
+    // Initialize the page when DOM is loaded
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Initialize UI components
+        initUI();
+        
+        // Load user data from localStorage (set during login)
+        const user_id = localStorage.getItem("user_id");
+        const Fname = localStorage.getItem("Fname");
+        const Lname = localStorage.getItem("Lname");
+        const role = localStorage.getItem("role") || "Customer";
+        
+        if (user_id && Fname && Lname) {
+            await initUserData(user_id, role, `${Fname} ${Lname}`);
+        } else {
+            // Redirect to login if no user data found
+            window.location.href = "login.html";
+        }
+    });
+    
+    async function initUI() {
+        // Navbar scroll effect
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    
+        // Initialize date picker with min date (today)
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const yyyy = today.getFullYear();
+        const minDate = `${yyyy}-${mm}-${dd}`;
+        document.getElementById('service-date').min = minDate;
+    
+        // Vehicle Management Elements
+        const addVehicleBtn = document.getElementById('add-vehicle-btn');
+        const vehicleModal = document.getElementById('vehicle-modal');
+        const closeModal = document.getElementById('close-modal');
+        const vehicleForm = document.getElementById('vehicle-form');
+        const vehicleBrandSelect = document.getElementById('vehicle-brand');
+        const vehicleModelSelect = document.getElementById('vehicle-model');
+        
+        // Show/hide modal
+        addVehicleBtn.addEventListener('click', () => {
+            vehicleModal.style.display = 'flex';
+        });
+    
+        closeModal.addEventListener('click', () => {
+            vehicleModal.style.display = 'none';
+        });
+    
+        // Set up event listeners for brand selection
+        vehicleBrandSelect.addEventListener('change', () => {
+            populateModels(vehicleBrandSelect, vehicleModelSelect);
+        });
+    
+        // Save vehicle form handler
+        vehicleForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const vehicleData = {
+                reg_no: document.getElementById('vehicle-reg-number').value,
+                brand: vehicleBrandSelect.value,
+                model: vehicleModelSelect.value,
+                reg_year: document.getElementById('vehicle-year').value,
+                variant: document.getElementById('vehicle-variant').value,
+                customer_id: currentUser.id
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/vehicles`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(vehicleData)
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to save vehicle');
+                }
+                
+                await loadUserVehicles();
+                this.reset();
+                vehicleModal.style.display = 'none';
+                showSuccess('Vehicle added successfully!');
+            } catch (error) {
+                console.error('Error saving vehicle:', error);
+                showError(error.message || 'Failed to save vehicle. Please try again.');
+            }
+        });
+    
+        // Set up form navigation
+        setupFormNavigation();
+        
+        // Load services
+        await loadServices();
+    }
+    
+    // Initialize user data and load related information
+    async function initUserData(userId, role, name) {
+        currentUser.id = userId;
+        currentUser.role = role;
+        currentUser.name = name;
+        
+        // Load user's vehicles and bookings
+        await loadUserVehicles();
+        await loadUserBookings();
+    }
+    
+    // Load user's vehicles from backend
+    async function loadUserVehicles() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/vehicles?customer_id=${currentUser.id}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch vehicles');
+            }
+            
+            const vehicles = await response.json();
+            
+            // Update vehicles dropdown
+            const selectedVehicleSelect = document.getElementById('selected-vehicle');
+            selectedVehicleSelect.innerHTML = '<option value="">Choose a vehicle</option>';
+            
+            vehicles.forEach(vehicle => {
+                const option = document.createElement('option');
+                option.value = vehicle.reg_no;
+                option.textContent = `${vehicle.brand} ${vehicle.model} (${vehicle.reg_no})`;
+                option.setAttribute('data-brand', vehicle.brand);
+                option.setAttribute('data-model', vehicle.model);
+                option.setAttribute('data-year', vehicle.reg_year);
+                selectedVehicleSelect.appendChild(option);
+            });
+            
+            // Update vehicles list display
+            displayVehicles(vehicles);
+        } catch (error) {
+            console.error('Error loading user vehicles:', error);
+            showError('Failed to load your vehicles. Please try again.');
+        }
+    }
+    
+    // Display vehicles in the UI
+    function displayVehicles(vehicles) {
+        const vehiclesList = document.getElementById('vehicles-list');
+        vehiclesList.innerHTML = '';
+        
+        if (vehicles.length === 0) {
+            vehiclesList.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--gray);">No vehicles added yet. Click "Add Vehicle" to get started.</p>';
+            return;
+        }
+        
+        vehicles.forEach(vehicle => {
+            const vehicleCard = document.createElement('div');
+            vehicleCard.className = 'vehicle-card';
+            vehicleCard.style.background = 'white';
+            vehicleCard.style.padding = '1rem';
+            vehicleCard.style.borderRadius = '8px';
+            vehicleCard.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+            
+            vehicleCard.innerHTML = `
+                <h3 style="margin: 0 0 0.5rem;">${vehicle.brand} ${vehicle.model}</h3>
+                <p style="margin: 0.2rem 0; font-size: 0.9rem;"><strong>Reg No:</strong> ${vehicle.reg_no}</p>
+                <p style="margin: 0.2rem 0; font-size: 0.9rem;"><strong>Year:</strong> ${vehicle.reg_year}</p>
+                <button class="btn btn-outline" style="margin-top: 0.5rem; padding: 0.3rem 0.5rem; font-size: 0.8rem;" 
+                        onclick="deleteVehicle('${vehicle.reg_no}')">
+                    <i class="fas fa-trash"></i> Remove
+                </button>
+            `;
+            
+            vehiclesList.appendChild(vehicleCard);
+        });
+    }
+    
+    // Delete vehicle from backend
+    async function deleteVehicle(regNo) {
+        if (confirm('Are you sure you want to delete this vehicle?')) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/vehicles/${regNo}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        customer_id: currentUser.id
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to delete vehicle');
+                }
+                
+                // Refresh vehicles list
+                await loadUserVehicles();
+                showSuccess('Vehicle deleted successfully!');
+            } catch (error) {
+                console.error('Error deleting vehicle:', error);
+                showError(error.message || 'Failed to delete vehicle. Please try again.');
+            }
+        }
+    }
+    
+    
+//     async function loadUserBookings() {
+//     try {
+//         // Temporarily use mock data for testing
+//         const mockBookings = [
+//             {
+//                 booking_id: 1,
+//                 service_date: "2023-06-15",
+//                 time_slot: "Morning",
+//                 status: "Pending",
+//                 pickup_option: 1,
+//                 vehicle_brand: "Toyota",
+//                 vehicle_model: "Camry",
+//                 reg_no: "ABC123",
+//                 reg_year: "2020",
+//                 service_name: "Oil Change",
+//                 price: 59.99,
+//                 mechanic_name: "John Doe"
+//             }
+//         ];
+        
+//         displayBookings(mockBookings);
+//         return;
+        
+//         // Rest of your original code...
+//     } catch (error) {
+//         console.error('Error loading user bookings:', error);
+//         showError(error.message || 'Failed to load your bookings. Please try again.');
+//     }
+// }
+
+async function loadUserBookings() {
+    try {
+        console.log("[DEBUG] Starting to load bookings...");
+        
+        // First try with hardcoded user ID 1 to eliminate variable issues
+        const testUserId = 1;
+        const apiUrl = "http://localhost:3000/bookings/customer/1";
+        console.log("[DEBUG] Calling API:", apiUrl);
+        
+        const response = await fetch(apiUrl, {
+            method: "GET",
+            headers: { 
+                "Content-Type": "application/json",
+            }
+        });
+
+        console.log("[DEBUG] Response status:", response.status);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("[DEBUG] API Error Response:", errorText);
+            throw new Error(`Server returned ${response.status}: ${errorText}`);
+        }
+        
+        const bookings = await response.json();
+        console.log("[DEBUG] Received bookings data:", bookings);
+        
+        if (!Array.isArray(bookings)) {
+            throw new Error("Invalid data format - expected array");
+        }
+        
+        displayBookings(bookings);
+        
+    } catch (error) {
+        console.error("[DEBUG] Full error details:", {
+            message: error.message,
+            stack: error.stack,
+            name: error.name
+        });
+        showError(error.message || 'Failed to load your bookings. Please try again.');
+    }
+}
+
+async function testApiCall() {
+    try {
+        const response = await fetch("http://localhost:3000/bookings/customer/1");
+        console.log("Raw response:", response);
+        const text = await response.text();
+        console.log("Response text:", text);
+        const json = JSON.parse(text); // Try parsing manually
+        console.log("Parsed JSON:", json);
+    } catch (err) {
+        console.error("Test failed:", err);
+    }
+}
+
+// Call it immediately to test
+testApiCall();
+
+    // Display bookings in the UI
+    function displayBookings(bookings) {
+        const bookingsList = document.getElementById('bookings-list');
+        const emptyState = document.getElementById('empty-bookings');
+        
+        if (bookings.length === 0) {
+            bookingsList.innerHTML = '';
+            emptyState.style.display = 'block';
+            return;
+        }
+        
+        emptyState.style.display = 'none';
+        
+        // Sort bookings by date (newest first)
+        bookings.sort((a, b) => new Date(b.service_date) - new Date(a.service_date));
+        
+        bookingsList.innerHTML = bookings.map(booking => {
+            // Determine status class based on booking status
+            let statusClass = 'status-pending';
+            if (booking.status === 'In Progress') statusClass = 'status-in-progress';
+            if (booking.status === 'Completed') statusClass = 'status-completed';
+            if (booking.status === 'Cancelled') statusClass = 'status-cancelled';
+            
+            // Format date
+            const serviceDate = new Date(booking.service_date);
+            const formattedDate = serviceDate.toLocaleDateString('en-US', {
+                weekday: 'short', 
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+            
+            // Format time slot
+            let timeSlot = '';
+            if (booking.time_slot === 'Morning') timeSlot = '9AM - 12PM';
+            else if (booking.time_slot === 'Afternoon') timeSlot = '12PM - 3PM';
+            else if (booking.time_slot === 'Evening') timeSlot = '3PM - 6PM';
+            
+            return `
+                <div class="booking-card" data-status="${booking.status.toLowerCase().replace(' ', '-')}">
+                    <div class="booking-card-header">
+                        <div class="booking-id">Booking #${booking.booking_id}</div>
+                        <span class="booking-status ${statusClass}">${booking.status}</span>
+                        <h3>${booking.service_name}</h3>
+                        <p><i class="fas fa-calendar-alt"></i> ${formattedDate}, ${timeSlot}</p>
+                    </div>
+                    <div class="booking-card-body">
+                        <div class="booking-detail">
+                            <div class="booking-detail-icon">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <div class="booking-detail-content">
+                                <h4>Vehicle Details</h4>
+                                <p>${booking.vehicle_brand} ${booking.vehicle_model} (${booking.reg_no}) • ${booking.reg_year}</p>
+                            </div>
+                        </div>
+                        
+                        ${(booking.status === 'Pending' || booking.status === 'In Progress') ? `
+                        <div class="booking-detail">
+                            <div class="booking-detail-icon">
+                                <i class="fas fa-user-cog"></i>
+                            </div>
+                            <div class="booking-detail-content">
+                                <h4>Assigned Mechanic</h4>
+                                <p>${booking.mechanic_name || 'Not assigned yet'}</p>
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        <div class="booking-detail">
+                            <div class="booking-detail-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="booking-detail-content">
+                                <h4>Service Price</h4>
+                                <p>₹${parseFloat(booking.price).toFixed(2)}</p>
+                            </div>
+                        </div>
+                        
+                        ${booking.special_request ? `
+                        <div class="booking-detail">
+                            <div class="booking-detail-icon">
+                                <i class="fas fa-sticky-note"></i>
+                            </div>
+                            <div class="booking-detail-content">
+                                <h4>Special Requests</h4>
+                                <p>${booking.special_request}</p>
+                            </div>
+                        </div>` : ''}
+                        
+                        ${booking.status === 'Pending' ? `
+                        <div class="booking-actions">
+                            <button class="btn btn-outline" onclick="cancelBooking(${booking.booking_id})">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    
+        initBookingTabs();
+    }
+    
+    // Initialize booking tabs filtering
+    function initBookingTabs() {
+        const tabButtons = document.querySelectorAll('.booking-tab-btn');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active tab
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Filter bookings
+                const statusFilter = button.dataset.tab;
+                const bookingCards = document.querySelectorAll('.booking-card');
+                
+                bookingCards.forEach(card => {
+                    if (statusFilter === 'all' || card.dataset.status === statusFilter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    }
+    
+    // Cancel booking
+    async function cancelBooking(bookingId) {
+        if (confirm('Are you sure you want to cancel this booking?')) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/bookings/${bookingId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: currentUser.id,
+                        role: currentUser.role
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to cancel booking');
+                }
+                
+                // Refresh bookings list
+                await loadUserBookings();
+                showSuccess('Booking cancelled successfully!');
+            } catch (error) {
+                console.error('Error cancelling booking:', error);
+                showError('Failed to cancel booking. Please try again.');
+            }
+        }
+    }
+    
+    // Load services from backend
+    async function loadServices() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/services`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch services');
+            }
+            
+            const services = await response.json();
+            populateServiceDropdown(services);
+        } catch (error) {
+            console.error('Error loading services:', error);
+            showError('Failed to load services. Please try again.');
+        }
+    }
+    
+    // Populate service dropdown
+    function populateServiceDropdown(services) {
+        const serviceSelect = document.getElementById('service-type');
+        serviceSelect.innerHTML = '<option value="">Choose Service</option>';
+        
+        services.forEach(service => {
+            const option = document.createElement('option');
+            option.value = service.service_id;
+            option.textContent = service.service_name;
+            serviceSelect.appendChild(option);
+        });
+    }
+    
+    // Populate car models based on brand selection
+    function populateModels(brandSelect, modelSelect) {
+        const selectedBrand = brandSelect.value;
+        modelSelect.innerHTML = '<option value="">Choose Model</option>';
+        
+        if (selectedBrand && carModelMap[selectedBrand]) {
+            carModelMap[selectedBrand].forEach(model => {
+                const option = document.createElement('option');
+                option.value = model.toLowerCase().replace(/\s+/g, '-');
+                option.textContent = model;
+                modelSelect.appendChild(option);
+            });
+        }
+    }
+    
+    // Setup form navigation and submission
+    function setupFormNavigation() {
+        const form = document.getElementById('booking-form');
+        const formSteps = form.querySelectorAll('.form-step');
+        const nextButtons = form.querySelectorAll('.next-step');
+        const prevButtons = form.querySelectorAll('.prev-step');
+        const steps = form.querySelectorAll('.step');
+        const progressBar = form.querySelector('.progress-bar');
+        const confirmButton = document.getElementById('confirm-booking');
+        
+        let currentStep = 0;
+        
+        function showStep(stepIndex) {
+            formSteps.forEach((step, index) => {
+                step.classList.toggle('active', index === stepIndex);
+                steps[index].classList.toggle('active', index === stepIndex);
+                steps[index].classList.toggle('completed', index < stepIndex);
+            });
+            
+            // Update progress bar (33%, 66%, 100%)
+            const progress = (stepIndex / (steps.length - 1)) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            currentStep = stepIndex;
+        }
+        
+        nextButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const currentStepElement = button.closest('.form-step');
+                if (validateStep(currentStepElement)) {
+                    showStep(currentStep + 1);
+                }
+            });
+        });
+        
+        prevButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                showStep(currentStep - 1);
+            });
+        });
+        
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate all steps before submission
+            let allStepsValid = true;
+            formSteps.forEach(step => {
+                if (!validateStep(step)) {
+                    allStepsValid = false;
+                }
+            });
+            
+            if (!allStepsValid) {
+                showError('Please complete all required fields in all steps');
+                return;
+            }
+            
+            // Get selected vehicle details
+            const selectedVehicle = document.getElementById('selected-vehicle');
+            const selectedOption = selectedVehicle.options[selectedVehicle.selectedIndex];
+            
+            if (!selectedOption.value) {
+                showError('Please select a valid vehicle');
+                showStep(0);
+                return;
+            }
+
+            // Map frontend service types to backend expected values
+            // const serviceTypeMap = {
+            //     'oil-change': 'Oil Change',
+            //     'tire-rotation': 'Tire Rotation',
+            //     'major-repair': 'Major Repair'
+            // };
+
+            // const frontendServiceType = document.getElementById('service-type').value;
+            // const backendServiceType = serviceTypeMap[frontendServiceType];
+
+            // if (!backendServiceType) {
+            //     showError('Please select a valid service type');
+            //     return;
+            // }
+            const serviceType = document.getElementById('service-type').value;
+            if (!serviceType) {
+                showError('Please select a service type');
+                return;
+            }
+
+            // Prepare booking data
+            const bookingData = {
+                user_id: currentUser.id,
+                reg_no: selectedOption.value,
+                car_brand: selectedOption.getAttribute('data-brand'),
+                car_model: selectedOption.getAttribute('data-model'),
+                registration_year: selectedOption.getAttribute('data-year'),
+                service_type: document.getElementById('service-type').value,
+                service_date: document.getElementById('service-date').value,
+                time_slot: capitalizeFirstLetter(document.getElementById('service-time').value),
+                pickup_option: document.getElementById('service-pickup').value,
+                special_request: document.getElementById('special-requests').value || null
+            };
+
+            try {
+                // Submit to backend
+                const response = await fetch(`${API_BASE_URL}/bookings`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(bookingData)
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to create booking');
+                }
+                
+                const bookingResponse = await response.json();
+                
+                // Show success message
+                showSuccess('Booking confirmed successfully!');
+                
+                // Reset form (but keep vehicle selection)
+                document.getElementById('service-type').value = '';
+                document.getElementById('service-date').value = '';
+                document.getElementById('service-time').value = '';
+                document.getElementById('service-pickup').value = '';
+                document.getElementById('special-requests').value = '';
+                
+                showStep(0);
+                
+                // Reload bookings to show the new one
+                await loadUserBookings();
+            } catch (error) {
+                console.error('Booking error:', error);
+                showError(`Booking failed: ${error.message}`);
+            }
+        });
+    }
+    
+    // Validate all inputs in a form step
+    function validateStep(stepElement) {
+        const inputs = stepElement.querySelectorAll('input[required], select[required], textarea[required]');
+        let isValid = true;
+        
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                isValid = false;
+                input.classList.add('error');
+                
+                if (!input.nextElementSibling || !input.nextElementSibling.classList.contains('error-message')) {
+                    const errorMsg = document.createElement('div');
+                    errorMsg.className = 'error-message';
+                    errorMsg.textContent = 'This field is required';
+                    input.parentNode.insertBefore(errorMsg, input.nextSibling);
+                }
+            } else {
+                input.classList.remove('error');
+                const errorMsg = input.nextElementSibling;
+                if (errorMsg && errorMsg.classList.contains('error-message')) {
+                    errorMsg.remove();
+                }
+            }
+        });
+        
+        if (!isValid) {
+            // Scroll to first error
+            const firstError = stepElement.querySelector('.error');
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            return false;
+        }
+        
+        return true;
+    }
+    
+    // Helper function to capitalize first letter
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    
+    // Show error message to user
+    function showError(message) {
+        const errorElement = document.createElement('div');
+        errorElement.id = 'error-message';
+        errorElement.style.position = 'fixed';
+        errorElement.style.top = '20px';
+        errorElement.style.right = '20px';
+        errorElement.style.background = '#f72585';
+        errorElement.style.color = 'white';
+        errorElement.style.padding = '1rem 2rem';
+        errorElement.style.borderRadius = '5px';
+        errorElement.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+        errorElement.style.zIndex = '1000';
+        errorElement.textContent = message;
+        
+        document.body.appendChild(errorElement);
+        
+        setTimeout(() => {
+            errorElement.remove();
+        }, 5000);
+    }
+    
+    // Show success message
+    function showSuccess(message) {
+        const successElement = document.getElementById('success-message');
+        successElement.textContent = message;
+        successElement.style.display = 'block';
+        setTimeout(() => {
+            successElement.style.display = 'none';
+        }, 5000);
+    }
+</script>
+
+</body>
+</html>
