@@ -13,7 +13,7 @@ Services: Oil Change, Tire Rotation, Major Repair
 
 Mechanic specialization and booking assignment
 
-Booking system with date, time slot, status, and pickup option
+Booking system with date, time slot, status, and pickup option,
 
 Azure-hosted MySQL database
 
